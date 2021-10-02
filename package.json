@@ -1,0 +1,29 @@
+{
+  "name": "tourneybot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "aws-sdk": "^2.996.0",
+    "dotenv": "^10.0.0",
+    "ejs": "^3.1.6",
+    "express": "^4.17.1",
+    "express-session": "^1.17.2",
+    "graphql": "^15.6.0",
+    "graphql-request": "^3.5.0",
+    "lodash": "^4.17.21",
+    "toad-scheduler": "^1.5.0",
+    "twitter-api-v2": "^1.5.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.13"
+  }
+}

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <%- include('../partials/head'); %>
+</head>
+
+<body>
+
+    <form>
+        <p>What is the ID of the tournament you would like to subscribe to for match updates?</p>
+
+        <input id="tourneyId">
+        <input id="eventId">
+        <button type="submit" id="submit">Submit</button>
+
+        <fieldset id="checkboxes" style="display: none;">
+
+        </fieldset>
+    </form>
+    <script>
+        let phasesState = {};
+
+        document.getElementById("submit").addEventListener("click", (e) => {
+            e.preventDefault();
+            let id = document.getElementById("tourneyId").value;
+            let event = document.getElementById("eventId").value;
+            console.log(id, event)
+            fetch(`/registerTourney?tourneyId=${id}&eventId=${event}`)
+                .then((res) => res.json())
+                .then((data) => {
+                    if (data.phases.length > 0) {
+                        let checkboxField = document.getElementById("checkboxes")
+                        checkboxField.style.display = "block";
+                        data.phases.forEach(phase => {
+                            let checkbox = document.createElement("input");
+                            checkbox.type = "checkbox";
+                            checkbox.value = phase.id;
+                            checkbox.addEventListener("click", (e) => {
+                                phasesState[phase.id] = e.target.checked;
+                                console.log(phasesState)
+                            })
+                            let label = document.createElement("label");
+                            label.textContent = phase.name;
+                            checkboxField.appendChild(checkbox);
+                            checkboxField.appendChild(label);
+                        });
+
+                        let button = document.createElement("button");
+                        button.textContent = "Subscribe to phases";
+                        button.addEventListener("click", (e) => {
+                            e.preventDefault();
+                            let phasesSelected = Object.keys(phasesState).map((key) => phasesState[key] && key || null)
+                            console.log(phasesSelected)
+                            fetch("/subscribeToTourney", {
+                                method: "POST",
+                                headers: { "Content-Type": "application/json" },
+                                body: JSON.stringify(phasesSelected)
+                            })
+                        })
+                        checkboxField.appendChild(button);
+
+                    } else {
+                        // no valid phases
+                    }
+                })
+                .catch((err) => {
+                    console.log(err)
+                })
+        })
+
+    </script>
+</body>
+
+</html>
